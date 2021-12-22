@@ -1,19 +1,12 @@
 ﻿#include <iostream>
+#include <iomanip>
 #include <stdio.h>
 #include <time.h>
-#include <Windows.h>
 #define N 23
 const int t = N * 1.5;
 using namespace std;
-void goXY(int x, int y){
-    COORD position;										// Объявление необходимой структуры
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);	// Получение дескриптора устройства стандартного вывода
-    position.X = x;									    // Установка координаты X
-    position.Y = y;									    // Установка координаты Y
-    SetConsoleCursorPosition(hConsole, position);
-}
 void randInput(int* arr){
-    //srand(time(NULL));
+    srand(time(NULL));
     for(int i = 0; i < N; i++){
         bool stop = false;
         while(!stop){
@@ -30,7 +23,7 @@ void randInput(int* arr){
 }
 void show(int* arr, int size = N){
     for(int i = 0; i < size; i++){
-        cout << arr[i] << "   ";
+        cout << arr[i] << "  ";
     }
     cout << endl << endl;
 }
@@ -62,15 +55,21 @@ public:
             else
                 left->addChild(value);
     }
-    void showTree(NodeTree* t, const int level = 0, const int x = 0){
-        if(t->left != nullptr)
-            showTree(t->left, level + 1, x - 10);
-        /*for(int i = 0; i < level; i++)
-            std::cout << "      ";*/
-        goXY(160/(pow(2, level)+1), level+5);
-        std::cout << t->value;
+    void showTree(NodeTree* t, const int level = 0){
         if(t->right != nullptr)
-            showTree(t->right, level + 1, x + 10);
+            showTree(t->right, level + 1);
+        for(int i = 0; i < level; i++)
+            std::cout << "     ";
+        std::cout << t->value << std::endl;
+        if(t->left != nullptr)
+            showTree(t->left, level + 1);
+    }
+    void leftTraversal(){
+        cout << value << ", ";
+        if(left != nullptr)
+            left->leftTraversal();
+        if(right != nullptr)
+            right->leftTraversal();
     }
 };
 
@@ -83,6 +82,7 @@ int main(){
     for(int i = 1; i < N; i++){
         tree->addChild(a[i]);
     }
-    tree->showTree(tree, 0, 40);
-    goXY(0, 30);
+    tree->showTree(tree);
+    cout << endl << endl;
+    tree->leftTraversal();
 }
